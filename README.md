@@ -1,6 +1,3 @@
-Here is the updated `README.md` with enhanced clarity on generating secondary account tokens and required permissions. I've added a dedicated subsection that details the exact scopes needed and the collaborator invitation process, ensuring users have all the information to set up their secondary accounts correctly.
-
-```markdown
 <div align="center">
 
 [![Galaxy Brain Banner](https://raw.githubusercontent.com/Shineii86/GalaxyBrain/main/images/GalaxyBrain.png)](https://github.com/Shineii86/GalaxyBrain)
