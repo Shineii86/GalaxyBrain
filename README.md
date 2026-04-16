@@ -1,3 +1,6 @@
+Here is the updated `README.md` with enhanced clarity on generating secondary account tokens and required permissions. I've added a dedicated subsection that details the exact scopes needed and the collaborator invitation process, ensuring users have all the information to set up their secondary accounts correctly.
+
+```markdown
 <div align="center">
 
 [![Galaxy Brain Banner](https://raw.githubusercontent.com/Shineii86/GalaxyBrain/main/images/GalaxyBrain.png)](https://github.com/Shineii86/GalaxyBrain)
@@ -18,7 +21,7 @@ A **fully automated** Python script that runs in **Google Colab** to earn the **
 > [!WARNING]
 > **This script automates interactions with GitHub Discussions to artificially trigger the Galaxy Brain achievement.**
 > - **Use responsibly.** Inflating achievements may be viewed negatively by potential employers or collaborators, and may violate GitHub's Terms of Service.
-> - You need **Personal Access Tokens (classic)** with `repo` and `discussions` scopes for **each account** involved (main + at least two secondaries).
+> - You need **Personal Access Tokens (classic)** with `repo` and `write:discussion` scopes for **each account** involved (main + at least two secondaries).
 > - The script creates discussions and answers in your repository. **Ensure Discussions are enabled** in repository settings.
 > - This tool is intended for **educational purposes and personal experimentation** only.
 
@@ -29,6 +32,10 @@ A **fully automated** Python script that runs in **Google Colab** to earn the **
 - [What is This Tool?](#-what-is-this-tool)
 - [Why Use This Method?](#-why-use-this-method)
 - [Prerequisites](#-prerequisites)
+  - [1. Required Accounts](#1-required-accounts)
+  - [2. Enable Discussions on Your Repository](#2-enable-discussions-on-your-repository)
+  - [3. Generate Personal Access Tokens (Classic)](#3-generate-personal-access-tokens-classic)
+  - [4. Add Secondary Accounts as Collaborators](#4-add-secondary-accounts-as-collaborators)
 - [Step-by-Step Guide](#-step-by-step-guide)
 - [Configuration Options](#-configuration-options)
 - [How It Works](#-how-it-works-technical-overview)
@@ -48,8 +55,7 @@ Using the **GitHub GraphQL API**, the script:
 
 This process is repeated until the desired number of accepted answers is reached (minimum **2** for the achievement).
 
-> [!NOTE]
-> This tool does **not** guarantee immediate achievement unlock. GitHub may take up to 24 hours to update achievement status.
+> [!NOTE] This tool does **not** guarantee immediate achievement unlock. GitHub may take up to 24 hours to update achievement status.
 
 ---
 
@@ -67,39 +73,56 @@ This process is repeated until the desired number of accepted answers is reached
 
 ## 🧰 Prerequisites
 
-Before you begin, ensure you have:
+### 1. Required Accounts
 
-1. **A GitHub main account** (the one that will receive the achievement).
-2. **At least two secondary GitHub accounts** (to act as answerers).
-3. **A repository under your main account** with **Discussions enabled**.
-4. **Personal Access Tokens (Classic)** for **each account** with the following scopes:
-   - `repo` (full control of private repositories)
-   - `write:discussion` (read/write access to discussions)
+- **One main GitHub account** – This account will receive the Galaxy Brain achievement.
+- **At least two secondary GitHub accounts** – These accounts will post the answers that the main account accepts. You can use existing accounts or create new ones.
 
-### 🔐 How to Get a Personal Access Token
+### 2. Enable Discussions on Your Repository
 
-1. Log in to each account, then go to **Settings** → **Developer settings** → **Personal access tokens** → **Tokens (classic)**.
-2. Click **Generate new token (classic)**.
-3. Give it a name (e.g., `Galaxy Brain Token`).
-4. Under **Select scopes**, check **`repo`** and **`write:discussion`**.
-5. Click **Generate token** and **copy the token immediately** — you won't see it again.
-
-> 🔒 **Keep these tokens secret.** Never share them or commit them to a public repository.
-
-### 📢 Enable Discussions on Your Repository
-
-1. Go to your repository on GitHub.
+1. Go to the repository under your main account.
 2. Click **Settings** → **Features**.
 3. Under **Discussions**, check **Enable Discussions**.
-4. A default category (e.g., "General") will be created—the script uses the first available category.
+4. A default category (e.g., "General") will be created—the script uses the first available category automatically.
 
-### 👥 Add Secondary Accounts as Collaborators
+### 3. Generate Personal Access Tokens (Classic)
 
-The secondary accounts must have **write access** to the repository in order to post answers.
+You need a **Personal Access Token (Classic)** for **each account** (main and both secondaries). These tokens grant the script permission to act on behalf of each account.
 
-1. Go to your repository → **Settings** → **Collaborators and teams**.
-2. Click **Add people** and invite each secondary account.
-3. Accept the invitation from each secondary account.
+> [!IMPORTANT]
+> **Required scopes for all tokens (main and secondary):**
+> - `repo` – Grants full control of private repositories (required for posting answers).
+> - `write:discussion` – Grants read/write access to GitHub Discussions.
+
+#### How to Create a Token
+
+For **each account** (main, secondary1, secondary2), repeat these steps:
+
+1. Log in to the account and go to **Settings** → **Developer settings** → **Personal access tokens** → **Tokens (classic)**.
+2. Click **Generate new token** → **Generate new token (classic)**.
+3. Give it a descriptive **Note** (e.g., `Galaxy Brain Script`).
+4. Set an **Expiration** (e.g., 7 days – recommended for security).
+5. Under **Select scopes**, check the following boxes:
+   - ☑️ **repo** (this automatically selects all sub‑scopes under `repo`)
+   - ☑️ **write:discussion** (under `write:discussion`)
+6. Click **Generate token**.
+7. **Copy the token immediately** (it starts with `ghp_`) and store it securely. You will not be able to see it again.
+
+> 🔒 **Security Note:** Treat these tokens like passwords. Never commit them to a public repository or share them with anyone.
+
+### 4. Add Secondary Accounts as Collaborators
+
+The secondary accounts must have **write access** to your repository to post answers. You need to invite them as collaborators.
+
+1. Go to your repository (under the main account) → **Settings** → **Collaborators and teams**.
+2. Click **Add people** and enter the username of the first secondary account.
+3. Click **Add to repository**.
+4. Repeat for the second secondary account.
+
+**Accept the Invitation:**
+- Log in to each secondary account, go to `https://github.com/YOUR_MAIN_USERNAME/REPO_NAME` or check the email notification, and **accept the invitation**.
+
+> ✅ **Verification:** You can confirm a secondary account has access by logging into that account and checking if you can see the repository in your list of repositories.
 
 ---
 
@@ -118,7 +141,7 @@ Inside the Colab notebook, you'll find a single configuration cell with form fie
 | Variable                 | Description                                                               | Example Value               |
 |--------------------------|---------------------------------------------------------------------------|-----------------------------|
 | `MAIN_USERNAME`          | Your main GitHub handle (to earn the achievement)                         | `"Shineii86"`               |
-| `MAIN_TOKEN`             | Personal Access Token for main account (keep secret!)                     | `"ghp_abc123..."`           |
+| `MAIN_TOKEN`             | Personal Access Token for main account                                    | `"ghp_abc123..."`           |
 | `SECONDARY_1_USERNAME`   | First secondary account handle                                            | `"helper1"`                 |
 | `SECONDARY_1_TOKEN`      | Personal Access Token for first secondary account                         | `"ghp_def456..."`           |
 | `SECONDARY_2_USERNAME`   | Second secondary account handle                                           | `"helper2"`                 |
@@ -182,7 +205,7 @@ Creating 2 accepted answer(s)
 | `MAIN_USERNAME`          | —       | The GitHub username that will earn the achievement.                                                            |
 | `MAIN_TOKEN`             | —       | PAT for the main account with `repo` and `write:discussion` scopes.                                            |
 | `SECONDARY_1_USERNAME`   | —       | Username for the first secondary (answerer) account.                                                           |
-| `SECONDARY_1_TOKEN`      | —       | PAT for the first secondary account.                                                                           |
+| `SECONDARY_1_TOKEN`      | —       | PAT for the first secondary account with identical scopes.                                                     |
 | `SECONDARY_2_USERNAME`   | —       | Username for the second secondary account.                                                                     |
 | `SECONDARY_2_TOKEN`      | —       | PAT for the second secondary account.                                                                          |
 | `REPO_NAME`              | —       | Repository name (under `MAIN_USERNAME`) where discussions will be created.                                     |
@@ -225,12 +248,12 @@ The script interacts with the **GitHub GraphQL API v4** using the following muta
                                       │
                                       ▼
                             ┌──────────────────────┐
-                            │  Answer Comment ID   │
+                            │     Answer Comment ID    │
                             └──────────────────────┘
                                       │
                                       ▼
 ┌─────────────────┐     ┌─────────────────────────┐
-│  Main Account   │────▶│  Mark as Accepted       │
+│  Main Account      │───▶│  Mark as Accepted           │
 └─────────────────┘     └─────────────────────────┘
 ```
 
