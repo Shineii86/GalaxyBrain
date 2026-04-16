@@ -52,7 +52,8 @@ Using the **GitHub GraphQL API**, the script:
 
 This process is repeated until the desired number of accepted answers is reached (minimum **2** for the achievement).
 
-> [!NOTE] This tool does **not** guarantee immediate achievement unlock. GitHub may take up to 24 hours to update achievement status.
+> [!NOTE]
+> This tool does **not** guarantee immediate achievement unlock. GitHub may take up to 24 hours to update achievement status.
 
 ---
 
