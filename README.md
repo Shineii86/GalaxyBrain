@@ -19,7 +19,7 @@ A **fully automated** Python script that runs in **Google Colab** to earn the **
 > **This script automates interactions with GitHub Discussions to artificially trigger the Galaxy Brain achievement.**
 > - **Use responsibly.** Inflating achievements may be viewed negatively by potential employers or collaborators, and may violate GitHub's Terms of Service.
 > - You need **Personal Access Tokens (classic)** with `repo` and `write:discussion` scopes for **each account** involved (main + at least two secondaries).
-> - The script creates discussions and answers in your repository. **Ensure Discussions are enabled** in repository settings.
+> - The script creates discussions and answers in your repository. **Ensure Discussions are enabled** and a **Q&A category exists**.
 > - This tool is intended for **educational purposes and personal experimentation** only.
 
 ---
@@ -31,8 +31,9 @@ A **fully automated** Python script that runs in **Google Colab** to earn the **
 - [Prerequisites](#-prerequisites)
   - [1. Required Accounts](#1-required-accounts)
   - [2. Enable Discussions on Your Repository](#2-enable-discussions-on-your-repository)
-  - [3. Generate Personal Access Tokens (Classic)](#3-generate-personal-access-tokens-classic)
-  - [4. Add Secondary Accounts as Collaborators](#4-add-secondary-accounts-as-collaborators)
+  - [3. Create a Q&A Category](#3-create-a-qa-category)
+  - [4. Generate Personal Access Tokens (Classic)](#4-generate-personal-access-tokens-classic)
+  - [5. Add Secondary Accounts as Collaborators](#5-add-secondary-accounts-as-collaborators)
 - [Step-by-Step Guide](#-step-by-step-guide)
 - [Configuration Options](#-configuration-options)
 - [How It Works](#-how-it-works-technical-overview)
@@ -81,9 +82,19 @@ This process is repeated until the desired number of accepted answers is reached
 1. Go to the repository under your main account.
 2. Click **Settings** → **Features**.
 3. Under **Discussions**, check **Enable Discussions**.
-4. A default category (e.g., "General") will be created—the script uses the first available category automatically.
 
-### 3. Generate Personal Access Tokens (Classic)
+### 3. Create a Q&A Category
+
+The script requires a discussion category that supports **accepted answers** (Q&A format). If you don't have one, create it:
+
+1. In your repository, go to **Settings** → **Discussions** → **Categories**.
+2. Click **New category**.
+3. Choose **Q&A** format and give it a name (e.g., "Q&A").
+4. Click **Create**.
+
+> The script automatically selects the first answerable category it finds.
+
+### 4. Generate Personal Access Tokens (Classic)
 
 You need a **Personal Access Token (Classic)** for **each account** (main and both secondaries). These tokens grant the script permission to act on behalf of each account.
 
@@ -108,7 +119,7 @@ For **each account** (main, secondary1, secondary2), repeat these steps:
 
 > 🔒 **Security Note:** Treat these tokens like passwords. Never commit them to a public repository or share them with anyone.
 
-### 4. Add Secondary Accounts as Collaborators
+### 5. Add Secondary Accounts as Collaborators
 
 The secondary accounts must have **write access** to your repository to post answers. You need to invite them as collaborators.
 
@@ -136,23 +147,23 @@ The secondary accounts must have **write access** to your repository to post ans
 
 Inside the Colab notebook, you'll find a single configuration cell with form fields:
 
-| Variable                 | Description                                                               | Example Value               |
-|--------------------------|---------------------------------------------------------------------------|-----------------------------|
-| `MAIN_USERNAME`          | Your main GitHub handle (to earn the achievement)                         | `"Shineii86"`               |
-| `MAIN_TOKEN`             | Personal Access Token for main account                                    | `"ghp_abc123..."`           |
-| `SECONDARY_1_USERNAME`   | First secondary account handle                                            | `"helper1"`                 |
-| `SECONDARY_1_TOKEN`      | Personal Access Token for first secondary account                         | `"ghp_def456..."`           |
-| `SECONDARY_2_USERNAME`   | Second secondary account handle                                           | `"helper2"`                 |
-| `SECONDARY_2_TOKEN`      | Personal Access Token for second secondary account                        | `"ghp_ghi789..."`           |
-| `REPO_NAME`              | Target repository (must exist under `MAIN_USERNAME`)                      | `"galaxy-brain-demo"`       |
-| `NUM_ANSWERS`            | Number of accepted answers to create (minimum 2 for Galaxy Brain)         | `2`                         |
-| `ACTION_DELAY`           | Seconds to wait between API calls (increase to appear more natural)       | `5`                         |
+| Variable          | Description                                                               | Example Value               |
+|-------------------|---------------------------------------------------------------------------|-----------------------------|
+| `MAIN_USERNAME`   | Your main GitHub handle (to earn the achievement)                         | `"Shineii86"`               |
+| `MAIN_TOKEN`      | Personal Access Token for main account                                    | `"ghp_abc123..."`           |
+| `USERNAME_1`      | First secondary account handle                                            | `"helper1"`                 |
+| `TOKEN_1`         | Personal Access Token for first secondary account                         | `"ghp_def456..."`           |
+| `USERNAME_2`      | Second secondary account handle                                           | `"helper2"`                 |
+| `TOKEN_2`         | Personal Access Token for second secondary account                        | `"ghp_ghi789..."`           |
+| `REPO_NAME`       | Target repository (must exist under `MAIN_USERNAME`)                      | `"galaxy-brain-demo"`       |
+| `NUM_ANSWERS`     | Number of accepted answers to create (minimum 2 for Galaxy Brain)         | `2`                         |
+| `ACTION_DELAY`    | Seconds to wait between API calls (increase to appear more natural)       | `5`                         |
 
 ### 3️⃣ Run the Notebook
 
 Click **Runtime → Run all** (or press `Ctrl+F9`). The notebook will:
 - Install `requests`
-- Fetch your repository ID and discussion category
+- Fetch your repository ID and an answerable category
 - For each requested answer:
   - Create a discussion (main account)
   - Post an answer (secondary account)
@@ -167,7 +178,7 @@ Repository: Shineii86/galaxy-brain-demo
 Creating 2 accepted answer(s)
 
 🔍 Fetching repository information...
-✅ Found repository ID and category: General
+✅ Found repository ID and answerable category: 'Q&A'
 
 --- Processing answer 1 of 2 ---
 👤 Secondary account: helper1
@@ -198,17 +209,17 @@ Creating 2 accepted answer(s)
 
 ## ⚙️ Configuration Options
 
-| Parameter                | Default | Description                                                                                                   |
-|--------------------------|---------|---------------------------------------------------------------------------------------------------------------|
-| `MAIN_USERNAME`          | —       | The GitHub username that will earn the achievement.                                                            |
-| `MAIN_TOKEN`             | —       | PAT for the main account with `repo` and `write:discussion` scopes.                                            |
-| `SECONDARY_1_USERNAME`   | —       | Username for the first secondary (answerer) account.                                                           |
-| `SECONDARY_1_TOKEN`      | —       | PAT for the first secondary account with identical scopes.                                                     |
-| `SECONDARY_2_USERNAME`   | —       | Username for the second secondary account.                                                                     |
-| `SECONDARY_2_TOKEN`      | —       | PAT for the second secondary account.                                                                          |
-| `REPO_NAME`              | —       | Repository name (under `MAIN_USERNAME`) where discussions will be created.                                     |
-| `NUM_ANSWERS`            | `2`     | Number of accepted answers to create. Set to `2` for Galaxy Brain, or higher for testing.                      |
-| `ACTION_DELAY`           | `5`     | Delay in seconds between API calls. Increase to `10–15` to mimic human behavior and reduce detection risk.     |
+| Parameter        | Default | Description                                                                                                   |
+|------------------|---------|---------------------------------------------------------------------------------------------------------------|
+| `MAIN_USERNAME`  | —       | The GitHub username that will earn the achievement.                                                            |
+| `MAIN_TOKEN`     | —       | PAT for the main account with `repo` and `write:discussion` scopes.                                            |
+| `USERNAME_1`     | —       | Username for the first secondary (answerer) account.                                                           |
+| `TOKEN_1`        | —       | PAT for the first secondary account with identical scopes.                                                     |
+| `USERNAME_2`     | —       | Username for the second secondary account.                                                                     |
+| `TOKEN_2`        | —       | PAT for the second secondary account.                                                                          |
+| `REPO_NAME`      | —       | Repository name (under `MAIN_USERNAME`) where discussions will be created.                                     |
+| `NUM_ANSWERS`    | `2`     | Number of accepted answers to create. Set to `2` for Galaxy Brain, or higher for testing.                      |
+| `ACTION_DELAY`   | `5`     | Delay in seconds between API calls. Increase to `10–15` to mimic human behavior and reduce detection risk.     |
 
 ### Adding More Secondary Accounts
 
@@ -216,8 +227,8 @@ If you need more than two answers from distinct accounts, you can extend the `se
 
 ```python
 secondary_accounts = [
-    {"username": SECONDARY_1_USERNAME, "token": SECONDARY_1_TOKEN},
-    {"username": SECONDARY_2_USERNAME, "token": SECONDARY_2_TOKEN},
+    {"username": USERNAME_1, "token": TOKEN_1},
+    {"username": USERNAME_2, "token": TOKEN_2},
     {"username": "helper3", "token": "ghp_..."},  # Add more
 ]
 ```
@@ -246,12 +257,12 @@ The script interacts with the **GitHub GraphQL API v4** using the following muta
                                       │
                                       ▼
                             ┌──────────────────────┐
-                            │     Answer Comment ID    │
+                            │  Answer Comment ID   │
                             └──────────────────────┘
                                       │
                                       ▼
 ┌─────────────────┐     ┌─────────────────────────┐
-│  Main Account      │───▶│  Mark as Accepted           │
+│  Main Account   │────▶│  Mark as Accepted       │
 └─────────────────┘     └─────────────────────────┘
 ```
 
@@ -261,14 +272,15 @@ All requests are authenticated via `Authorization: Bearer <TOKEN>` headers. Dela
 
 ## 🆘 Troubleshooting
 
-| Issue                                                      | Solution                                                                                     |
-|------------------------------------------------------------|----------------------------------------------------------------------------------------------|
-| `Repository not found or no access`                        | Verify the repository name and that your main token has `repo` scope. Ensure the repository exists. |
-| `Repository has no discussion categories`                  | Enable Discussions in repository settings (Settings → Features → Discussions).                |
-| `GraphQL errors: ...` or `Bad credentials`                 | Your token is incorrect, expired, or lacks the required scopes (`repo`, `write:discussion`). |
-| Secondary account cannot post answer                        | Ensure the secondary account has accepted the collaborator invitation to the repository.      |
-| Achievement not appearing after 24 hours                    | Wait longer (up to 48 hours). Ensure you have **at least two** accepted answers. Check that the answers are still marked as accepted (not unmarked). |
-| `Rate limit exceeded`                                      | Increase `ACTION_DELAY` or wait before running again. GitHub's GraphQL rate limit is generous (5,000 points/hour). |
+| Issue                                                                                                          | Solution                                                                                                                                                                                                                           |
+|----------------------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Repository not found or no access`                                                                             | Verify the repository name and that your main token has `repo` scope. Ensure the repository exists.                                                                                                                                |
+| `Repository has no discussion categories`                                                                       | Enable Discussions in repository settings (Settings → Features → Discussions).                                                                                                                                                     |
+| `GraphQL errors: ... 'does not belong to a discussion in a category that supports answers'`                     | The discussion category (e.g., "Announcements") does not allow accepted answers. Create a **Q&A** category: <br> 1. Go to `Settings` → `Discussions` → `Categories`. <br> 2. Click **New category**. <br> 3. Choose **Q&A** format and name it (e.g., "Q&A"). <br> 4. Save and re-run the script. |
+| `GraphQL errors: ...` or `Bad credentials`                                                                      | Your token is incorrect, expired, or lacks the required scopes (`repo`, `write:discussion`).                                                                                                                                       |
+| Secondary account cannot post answer                                                                             | Ensure the secondary account has accepted the collaborator invitation to the repository.                                                                                                                                           |
+| Achievement not appearing after 24 hours                                                                         | Wait longer (up to 48 hours). Ensure you have **at least two** accepted answers. Check that the answers are still marked as accepted (not unmarked).                                                                               |
+| `Rate limit exceeded`                                                                                           | Increase `ACTION_DELAY` or wait before running again. GitHub's GraphQL rate limit is generous (5,000 points/hour).                                                                                                                 |
 
 ---
 
